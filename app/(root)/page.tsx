@@ -14,7 +14,6 @@ const page = async () => {
   if (!clearUser) redirect('/sign-in')
 
   const roomDocuments = await getDocuments(clearUser.emailAddresses[0].emailAddress)
-  console.log("The rooms are", roomDocuments);
   
 
   return (
