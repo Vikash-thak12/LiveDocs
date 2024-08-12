@@ -3,10 +3,16 @@ import { ClientSideSuspense, RoomProvider } from '@liveblocks/react/suspense'
 import { Editor } from '@/components/editor/Editor'
 import Header from '@/components/Header'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
-import React from 'react'
+import React, { useState } from 'react'
 import ActiveCollaborators from './ActiveCollaborators'
 
 const CollaborativeRoom = ({ roomId, roomMetadata}: CollaborativeRoomProps) => {
+
+    const [documentTitle, setDocumentTitle] = useState(roomMetadata.title)
+    const [editing, setEditing] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+
     return (
         <RoomProvider id={roomId}>
             <ClientSideSuspense fallback={<div>Loading…</div>}>
