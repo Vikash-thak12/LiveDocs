@@ -11,7 +11,7 @@ const Provider = ({ children }: { children: ReactNode}) => {
             authEndpoint='/api/liveblocks-auth'
             resolveUsers={async({userIds}) => {
                 const users = await getClerkUser({ userIds });
-                return users;
+                return users;   
             }}
             >
                     <ClientSideSuspense fallback={<Loader />}>
