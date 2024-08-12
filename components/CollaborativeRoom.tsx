@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import ActiveCollaborators from './ActiveCollaborators'
 import { Input } from './ui/input'
 import Image from 'next/image'
+import { updateDocument } from '@/lib/actions/room.actions'
 
 const CollaborativeRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => {
 
@@ -20,13 +21,17 @@ const CollaborativeRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => 
     const containerRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLDivElement>(null)
 
-    const udpateTitleHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const udpateTitleHandler = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         // this is when i click enter then it will save the title and store in the metadata
         if(e.key === 'Enter') {
             setLoading(true)
             try {
                 if(documentTitle !== roomMetadata.title) {
-                    // updateTitle();
+                    const updatedDocument = await updateDocument(roomId, documentTitle)
+
+                    if(updatedDocument) {
+                        setEditing(false)
+                    }
                 }
             } catch (error) {
                 console.log(error);
@@ -42,6 +47,7 @@ const CollaborativeRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => 
         const handleClickOutside = (e: MouseEvent) => {
             if(containerRef.current  && !containerRef.current.contains(e.target as Node)) {
                 setEditing(false)
+                updateDocument(roomId, documentTitle)
             }
         }
         document.addEventListener('mousedown', handleClickOutside)
@@ -49,7 +55,13 @@ const CollaborativeRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
-    },[])
+    },[roomId, documentTitle])
+
+    useEffect(() => {
+        if(editing && inputRef.current){
+            inputRef.current.focus();
+        }
+    },[editing])
 
 
     return (
