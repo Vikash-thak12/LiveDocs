@@ -26,6 +26,10 @@ function Placeholder() {
 export function Editor({ roomId, currentUserType }: { roomId: string, currentUserType: UserType }) {
   const status = useEditorStatus();
   const {threads} = useThreads();
+  // console.log("The threads are",threads);
+  console.log("The threads are",threads[0].metadata);
+  
+  
 
 
   const initialConfig = liveblocksConfig({
